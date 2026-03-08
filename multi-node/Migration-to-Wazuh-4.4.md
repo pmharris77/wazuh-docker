@@ -83,6 +83,13 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=master-wazuh-integrations \
+           multi-node_master-wazuh-integrations
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
            --label com.docker.compose.volume=master-wazuh-active-response \
            multi-node_master-wazuh-active-response
 ```
@@ -90,15 +97,29 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
-           --label com.docker.compose.volume=master-wazuh-etc \
-           multi-node_master-wazuh-etc
+           --label com.docker.compose.volume=master-wazuh-agentless \
+           multi-node_master-wazuh-agentless
 ```
 ```
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
-           --label com.docker.compose.volume=master-wazuh-var \
-           multi-node_master-wazuh-var
+           --label com.docker.compose.volume=master-wazuh-wodles \
+           multi-node_master-wazuh-wodles
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=master-filebeat-etc \
+           multi-node_master-filebeat-etc
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=master-filebeat-var \
+           multi-node_master-filebeat-var
 ```
 ```
 docker volume create \
@@ -139,6 +160,13 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=worker-wazuh-integrations \
+           multi-node_worker-wazuh-integrations
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
            --label com.docker.compose.volume=worker-wazuh-active-response \
            multi-node_worker-wazuh-active-response
 ```
@@ -146,15 +174,29 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
-           --label com.docker.compose.volume=worker-wazuh-etc \
-           multi-node_worker-wazuh-etc
+           --label com.docker.compose.volume=worker-wazuh-agentless \
+           multi-node_worker-wazuh-agentless
 ```
 ```
 docker volume create \
            --label com.docker.compose.project=multi-node \
            --label com.docker.compose.version=1.25.0 \
-           --label com.docker.compose.volume=worker-wazuh-var \
-           multi-node_worker-wazuh-var
+           --label com.docker.compose.volume=worker-wazuh-wodles \
+           multi-node_worker-wazuh-wodles
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=worker-filebeat-etc \
+           multi-node_worker-filebeat-etc
+```
+```
+docker volume create \
+           --label com.docker.compose.project=multi-node \
+           --label com.docker.compose.version=1.25.0 \
+           --label com.docker.compose.volume=worker-filebeat-var \
+           multi-node_worker-filebeat-var
 ```
 **6. Copy the volume content from elasticsearch to Wazuh indexer volumes and old Wazuh manager content to new volumes.**
 ```
@@ -207,20 +249,38 @@ docker container run --rm -it \
 ```
 ```
 docker container run --rm -it \
+           -v wazuh-docker_ossec-integrations:/from \
+           -v multi-node_master-wazuh-integrations:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
            -v wazuh-docker_ossec-active-response:/from \
            -v multi-node_master-wazuh-active-response:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 ```
 docker container run --rm -it \
-           -v wazuh-docker-etc:/from \
-           -v multi-node_master-etc:/to \
+           -v wazuh-docker_ossec-agentless:/from \
+           -v multi-node_master-wazuh-agentless:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 ```
 docker container run --rm -it \
-           -v wazuh-docker-var:/from \
-           -v multi-node_master-wazuh-var:/to \
+           -v wazuh-docker_ossec-wodles:/from \
+           -v multi-node_master-wazuh-wodles:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
+           -v wazuh-docker_filebeat-etc:/from \
+           -v multi-node_master-filebeat-etc:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
+           -v wazuh-docker_filebeat-var:/from \
+           -v multi-node_master-filebeat-var:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 ```
@@ -255,20 +315,38 @@ docker container run --rm -it \
 ```
 ```
 docker container run --rm -it \
+           -v wazuh-docker_worker-ossec-integrations:/from \
+           -v multi-node_worker-wazuh-integrations:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
            -v wazuh-docker_worker-ossec-active-response:/from \
            -v multi-node_worker-wazuh-active-response:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 ```
 docker container run --rm -it \
-           -v wazuh-docker_worker-etc:/from \
-           -v multi-node_worker-wazuh-etc:/to \
+           -v wazuh-docker_worker-ossec-agentless:/from \
+           -v multi-node_worker-wazuh-agentless:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 ```
 docker container run --rm -it \
-           -v wazuh-docker_worker-var:/from \
-           -v multi-node_worker-wazuh-var:/to \
+           -v wazuh-docker_worker-ossec-wodles:/from \
+           -v multi-node_worker-wazuh-wodles:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
+           -v wazuh-docker_worker-filebeat-etc:/from \
+           -v multi-node_worker-filebeat-etc:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+```
+```
+docker container run --rm -it \
+           -v wazuh-docker_worker-filebeat-var:/from \
+           -v multi-node_worker-filebeat-var:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 ```
 

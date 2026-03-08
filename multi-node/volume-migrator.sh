@@ -49,20 +49,38 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=master-wazuh-integrations \
+           $2_master-wazuh-integrations
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
            --label com.docker.compose.volume=master-wazuh-active-response \
            $2_master-wazuh-active-response
 
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
-           --label com.docker.compose.volume=master-wazuh-etc \
-           $2_master-wazuh-etc
+           --label com.docker.compose.volume=master-wazuh-agentless \
+           $2_master-wazuh-agentless
 
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
-           --label com.docker.compose.volume=master-wazuh-var \
-           $2_master-wazuh-var
+           --label com.docker.compose.volume=master-wazuh-wodles \
+           $2_master-wazuh-wodles
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=master-filebeat-etc \
+           $2_master-filebeat-etc
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=master-filebeat-var \
+           $2_master-filebeat-var
 
 docker volume create \
            --label com.docker.compose.project=$2 \
@@ -97,24 +115,42 @@ docker volume create \
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=worker-wazuh-integrations \
+           $2_worker-wazuh-integrations
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
            --label com.docker.compose.volume=worker-wazuh-active-response \
            $2_worker-wazuh-active-response
 
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
-           --label com.docker.compose.volume=worker-wazuh-etc \
-           $2_worker-wazuh-etc
+           --label com.docker.compose.volume=worker-wazuh-agentless \
+           $2_worker-wazuh-agentless
 
 docker volume create \
            --label com.docker.compose.project=$2 \
            --label com.docker.compose.version=$1 \
-           --label com.docker.compose.volume=worker-wazuh-var \
-           $2_worker-wazuh-var
+           --label com.docker.compose.volume=worker-wazuh-wodles \
+           $2_worker-wazuh-wodles
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=worker-filebeat-etc \
+           $2_worker-filebeat-etc
+
+docker volume create \
+           --label com.docker.compose.project=$2 \
+           --label com.docker.compose.version=$1 \
+           --label com.docker.compose.volume=worker-filebeat-var \
+           $2_worker-filebeat-var
 
 docker container run --rm -it \
-           -v wazuh-docker_worker-var:/from \
-           -v $2_worker-wazuh-var:/to \
+           -v wazuh-docker_worker-filebeat-var:/from \
+           -v $2_worker-filebeat-var:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
@@ -158,18 +194,33 @@ docker container run --rm -it \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
+           -v wazuh-docker_ossec-integrations:/from \
+           -v $2_master-wazuh-integrations:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
            -v wazuh-docker_ossec-active-response:/from \
            -v $2_master-wazuh-active-response:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
-           -v wazuh-docker-etc:/from \
-           -v $2_master-wazuh-etc:/to \
+           -v wazuh-docker_ossec-agentless:/from \
+           -v $2_master-wazuh-agentless:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
-           -v wazuh-docker-var:/from \
-           -v $2_master-wazuh-var:/to \
+           -v wazuh-docker_ossec-wodles:/from \
+           -v $2_master-wazuh-wodles:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
+           -v wazuh-docker_filebeat-etc:/from \
+           -v $2_master-filebeat-etc:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
+           -v wazuh-docker_filebeat-var:/from \
+           -v $2_master-filebeat-var:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
@@ -198,16 +249,31 @@ docker container run --rm -it \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
+           -v wazuh-docker_worker-ossec-integrations:/from \
+           -v $2_worker-wazuh-integrations:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
            -v wazuh-docker_worker-ossec-active-response:/from \
            -v $2_worker-wazuh-active-response:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
-           -v wazuh-docker_worker-etc:/from \
-           -v $2_worker-wazuh-etc:/to \
+           -v wazuh-docker_worker-ossec-agentless:/from \
+           -v $2_worker-wazuh-agentless:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
 
 docker container run --rm -it \
-           -v wazuh-docker_worker-var:/from \
-           -v $2_worker-wazuh-var:/to \
+           -v wazuh-docker_worker-ossec-wodles:/from \
+           -v $2_worker-wazuh-wodles:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
+           -v wazuh-docker_worker-filebeat-etc:/from \
+           -v $2_worker-filebeat-etc:/to \
+           alpine ash -c "cd /from ; cp -avp . /to"
+
+docker container run --rm -it \
+           -v wazuh-docker_worker-filebeat-var:/from \
+           -v $2_worker-filebeat-var:/to \
            alpine ash -c "cd /from ; cp -avp . /to"
